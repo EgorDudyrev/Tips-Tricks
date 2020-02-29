@@ -1,4 +1,6 @@
-#import torch
+## Author: Egor Dudyrev
+
+import torch
 import numpy as np
 import skimage
 import cv2
@@ -90,10 +92,10 @@ class ChangeBrightnessContrast(object):
         return new_img
 
 
-#class ToTensor(object):
-#    def __call__(self, image):
-#        image = image.astype(np.float32)
-#        return torch.from_numpy(image)
+class ToTensor(object):
+    def __call__(self, image):
+        image = image.astype(np.float32)
+        return torch.from_numpy(image)
 
 #TODO: Your transforms here
 # Basic transforms:

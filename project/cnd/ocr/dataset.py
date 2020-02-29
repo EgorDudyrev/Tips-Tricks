@@ -1,12 +1,14 @@
+## Author: Egor Dudyrev
+
 import os
 import re
 import numpy as np
 import cv2
 
-#from torch.utils.data import Dataset
+from torch.utils.data import Dataset
 
 
-class OcrDataset():#Dataset):
+class OcrDataset(Dataset):
     def __init__(self, data_path, target_path, transforms=None):
         # TODO: Here you can create samples from dirs and initialize transfroms
         def load(x):
