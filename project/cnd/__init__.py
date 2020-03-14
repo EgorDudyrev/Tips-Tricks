@@ -1,1 +1,1 @@
-from cnd.ocr.model import CRNN
+import cnd.ocr

@@ -1,5 +1,9 @@
+import pathlib
 import trafaret as t
 from trafaret_config import read_and_validate
+
+OCR_EXPERIMENTS_DIR = pathlib.Path('/workdir/data/exp/')
+CONFIG_PATH = pathlib.Path('/workdir/cnd/config.json')
 
 CONFIG_TRAFARET = t.Dict({
     t.Key('data_path'): t.String(),
@@ -33,4 +37,3 @@ class Config:
 
     def get(self, *keys):
         return self._get(self.data, keys)
-

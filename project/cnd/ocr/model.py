@@ -66,23 +66,37 @@ class CRNN(nn.Module):
         super(CRNN, self).__init__()
         assert image_height % 16 == 0, "image_height has to be a multiple of 16"
 
-        ks = [3, 3, 3, 3, 3, 3, 2]
-        ps = [1, 1, 1, 1, 1, 1, 0]
-        ss = [1, 1, 1, 1, 1, 1, 1]
+        ks = [3, 3, 3, 3, 3, 3, 3, 3, 2]
+        ps = [1, 1, 1, 1, 1, 1, 1, 1, 0]
+        ss = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-        nm = [number_input_channels, 64, 128, 256, 256, 512, 512, 512]
+        nm = [number_input_channels, 32, 32, 64, 64, 64, 64, 64, 128, 128]
 
-        bn_layers = [None, None, nn.BatchNorm2d, None, nn.BatchNorm2d, None, nn.BatchNorm2d]
+        bn_layers = [
+            None,
+            None,
+            nn.BatchNorm2d,
+            None,
+            nn.BatchNorm2d,
+            None,
+            nn.BatchNorm2d,
+            None,
+            nn.BatchNorm2d,
+        ]
 
         poolings = [
             nn.MaxPool2d(2, 2),
             nn.MaxPool2d(2, 2),
             None,
-            nn.MaxPool2d((2, 2), (2, 1), (0, 1)),
+            None,
+            nn.MaxPool2d((2, 2), (2, 1), (1, 1)),
+            None,
+            nn.MaxPool2d((2, 2), (2, 1), (1, 1)),
             None,
             nn.MaxPool2d((2, 2), (2, 1), (0, 1)),
-            None,
+
         ]
+
 
         relus = [nn.ReLU] * len(ks)
 
@@ -104,7 +118,7 @@ class CRNN(nn.Module):
         self.cnn = nn.Sequential(*cnn)
 
         self.rnn = nn.Sequential(
-            BidirectionalLSTM(512, rnn_size, number_class_symbols)
+            BidirectionalLSTM(128, rnn_size, number_class_symbols)
         )
 
     def forward(self, input):
