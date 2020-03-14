@@ -1,0 +1,5 @@
+deep_pipe
+numpy
+scipy
+scikit-image
+
