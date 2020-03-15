@@ -1,4 +1,4 @@
-NAME?=student
+NAME?=student_dudyrev
 
 .PHONY: all build stop run logs
 

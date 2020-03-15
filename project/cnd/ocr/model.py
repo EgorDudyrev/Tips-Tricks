@@ -122,7 +122,6 @@ class CRNN(nn.Module):
         )
 
     def forward(self, input):
-        # conv features
         conv = self.cnn(input)
         b, c, h, w = conv.size()
         assert h == 1, "the height of conv must be 1"
