@@ -1,5 +1,7 @@
 import argparse
 
+from argus.model.build import MODEL_REGISTRY
+
 from torch.utils.data import DataLoader, ConcatDataset
 from argus.callbacks import MonitorCheckpoint, EarlyStopping
 from cnd.ocr.dataset import OcrDataset
@@ -35,9 +37,9 @@ DATASET_PATHS = [
 # CHANGE YOUR BATCH SIZE
 BATCH_SIZE = 500
 # 400 EPOCH SHOULD BE ENOUGH
-NUM_EPOCHS = 400
+NUM_EPOCHS = 1500 #400
 
-alphabet = " "
+alphabet = " -"
 alphabet += string.ascii_uppercase
 alphabet += "".join([str(i) for i in range(10)])
 
@@ -51,10 +53,11 @@ MODEL_PARAMS = {
             }),
     "alphabet": alphabet,
     "loss": {},
-    "optimizer": ("Adam", {"lr":  0.001}),  #  0.0001}),
+    "optimizer": ("Adam", {"lr":  0.0000001}),  #  0.0001}),
     # CHANGE DEVICE IF YOU USE GPU
     "device": "cpu",
 }
+
 
 if __name__ == "__main__":
     if EXPERIMENT_DIR.exists():
@@ -89,7 +92,7 @@ if __name__ == "__main__":
     # YOU CAN ADD CALLBACK IF IT NEEDED, FIND MORE IN argus.callbacks
     callbacks = [
         MonitorCheckpoint(EXPERIMENT_DIR, monitor="val_loss", max_saves=6),
-        EarlyStopping(monitor='val_loss', patience=5),
+        EarlyStopping(monitor='val_loss', patience=200),
     ]
     # YOU CAN IMPLEMENT DIFFERENT METRICS AND USE THEM TO SEE HOW MANY CORRECT PREDICTION YOU HAVE
     metrics = [StringAccuracy(), StringAccuracyLetters()]
