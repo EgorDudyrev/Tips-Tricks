@@ -58,7 +58,6 @@ MODEL_PARAMS = {
     "device": "cpu",
 }
 
-
 if __name__ == "__main__":
     if EXPERIMENT_DIR.exists():
         print(f"Folder 'EXPERIMENT_DIR' already exists")
