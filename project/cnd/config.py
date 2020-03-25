@@ -8,6 +8,9 @@ CONFIG_PATH = pathlib.Path('/workdir/cnd/config.json')
 CONFIG_TRAFARET = t.Dict({
     t.Key('data_path'): t.String(),
     t.Key('ocr_image_size'): t.List(t.Int[1:], 2, 2),
+    t.Key('model_image_ch'): t.Int(),
+    t.Key('model_rnn_size'): t.Int(),
+    t.Key('alphabet'): t.String(),
 })
 
 

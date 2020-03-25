@@ -17,14 +17,17 @@ class Visualizer:
         self.font_scale = font_scale
         self.font = font
 
-    def _draw_ocr_text(self, frame):
+    def _draw_ocr_text(self):
         text = self.state.text
+        frame = self.state.frame
         if text:
             #TODO: Put text on frame
+            cv2.putText(frame, text, (self.coord_x, self.coord_y), self.font,
+                        self.font_scale, self.color, self.thickness)
         return frame
 
-    def __call__(self, frame):
-        frame = self._draw_ocr_text(frame)
+    def __call__(self):
+        frame = self._draw_ocr_text()
         return frame
 
 
@@ -56,6 +59,11 @@ class VisualizeStream:
                     return
                 #TODO: Read && resize (if needed) then use visualizer to put text on frame
                 # then save video with VideoWriter
+                frame = self.visualizer()
+                if frame is not None:
+                    #continue
+                    frame = cv2.resize(frame, self.frame_size)
+                    self.out_video.write(frame)
 
                 time.sleep(self.sleep_time_vis)
 
@@ -68,7 +76,6 @@ class VisualizeStream:
         self.stopped = False
         self.visualize_thread = Thread(target=self._visualize, args=())
         self.visualize_thread.start()
-        self.in_video.start()
 
     def stop(self):
         self.logger.info("Stop VisualizeStream")

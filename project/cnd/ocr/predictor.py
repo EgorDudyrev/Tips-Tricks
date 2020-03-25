@@ -3,13 +3,16 @@ from argus.model import load_model
 from cnd.ocr.argus_model import CRNNModel
 from cnd.ocr.transforms import get_transforms
 import numpy as np
+from cnd.config import OCR_EXPERIMENTS_DIR, CONFIG_PATH, Config
+CV_CONFIG = Config(CONFIG_PATH)
+
 
 import torch
 
 
 class Predictor:
-    def __init__(self, model_path, image_size, converter, device="cuda"):
-        print(model_path)
+    def __init__(self, model_path, converter, image_size=CV_CONFIG.get('ocr_image_size'), device="cpu"):
+        #print(model_path)
         self.model = load_model(model_path, device=device)
         self.ocr_image_size = image_size
 

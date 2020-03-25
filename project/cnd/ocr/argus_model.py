@@ -52,8 +52,6 @@ class CRNNModel(Model):
 
         with torch.no_grad():
             #TODO: COMPUTE JUST THE SAME WAY AS TRAIN, BUT WITH NO GRAD!
-            self.optimizer.zero_grad()
-
             images, texts = self.prepare_batch(batch, self.device)  # TODO: MOVE YOUR BATCH TO DEVICE
             text, length = self.converter.encode(texts)  # USE CONVERTER TO CONVERT TEXT TO INTs and MOVE TO DEVICE TEXT
 

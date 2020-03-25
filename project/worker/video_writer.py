@@ -9,7 +9,7 @@ class VideoWriter:
         self.logger = logging.getLogger(self.name)
         self.video_path = video_path
         self.video = cv2.VideoWriter(video_path,
-                                     cv2.VideoWriter_fourcc(*"mp4v"),
+                                     cv2.VideoWriter_fourcc('M','J','P','G'),#*"mp4v"),
                                      fps, self.frame_size)
         self.logger.info("Create VideoWriter")
 

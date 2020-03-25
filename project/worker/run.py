@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 
 from worker.state import State
 from worker.video_reader import VideoReader
-# from worker.ocr_stream import OcrStream
+from worker.ocr_stream import OcrStream
 from worker.visualize_stream import VisualizeStream
 
 
@@ -32,12 +32,12 @@ def setup_logging(path, level='INFO'):
 
 
 class CNDProject:
-    def __init__(self, name, video_path, save_path, fps=60, frame_size=(800, 1600), coord=(500, 500)):
+    def __init__(self, name, video_path, save_path, fps=24, frame_size=(1600, 800), coord=(500, 500)):
         self.name = name
         self.logger = logging.getLogger(self.name)
         self.state = State()
         self.video_reader = VideoReader("VideoReader", video_path)
-        # self.ocr_stream = OcrStream(self.state, self.video_reader)
+        self.ocr_stream = OcrStream("IcrStream", self.state, self.video_reader)
 
         self.visualize_stream = VisualizeStream("VisualizeStream", self.video_reader,
                                                 self.state, save_path, fps, frame_size, coord)
@@ -47,7 +47,7 @@ class CNDProject:
         self.logger.info("Start project act start")
         try:
             self.video_reader.start()
-            # self.ocr_stream.start()
+            self.ocr_stream.start()
             self.visualize_stream.start()
             self.state.exit_event.wait()
         except Exception as e:
@@ -59,7 +59,7 @@ class CNDProject:
         self.logger.info("Stop Project")
 
         self.video_reader.stop()
-        # self.ocr_stream.stop()
+        self.ocr_stream.stop()
         self.visualize_stream.stop()
 
 

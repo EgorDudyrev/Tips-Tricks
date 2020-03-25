@@ -59,6 +59,7 @@ ENV TORCH_HOME=/workdir/data/.torch
 
 COPY ./cnd/ocr /workdir
 COPY ./CropNumbers /workdir/data/CropNumbers
+COPY ./videos /workdir/videos
 #COPY ../data/Numbase
 
 WORKDIR /workdir

@@ -35,25 +35,21 @@ DATASET_PATHS = [
     Path(CV_CONFIG.get("data_path"))
 ]
 # CHANGE YOUR BATCH SIZE
-BATCH_SIZE = 500
+BATCH_SIZE = 1000
 # 400 EPOCH SHOULD BE ENOUGH
 NUM_EPOCHS = 1500 #400
-
-alphabet = " -"
-alphabet += string.ascii_uppercase
-alphabet += "".join([str(i) for i in range(10)])
 
 MODEL_PARAMS = {
     "nn_module":
         ("CRNN", {
-            'image_height': 32,  #As far as h == 1, image height must be equal 16
-            'number_input_channels': 1,  #3 for color image and 1 for gray scale
-            'number_class_symbols': len(alphabet),  #Length of alphabet
-            'rnn_size': 64,  # time length of rnn layer, 64|128|256 and so on
+            'image_height': CV_CONFIG.get("ocr_image_size")[0],  #As far as h == 1, image height must be equal 16
+            'number_input_channels': CV_CONFIG.get("model_image_ch"),  #3 for color image and 1 for gray scale
+            'number_class_symbols': len(CV_CONFIG.get('alphabet')),  #Length of alphabet
+            'rnn_size': CV_CONFIG.get("model_rnn_size"),  # time length of rnn layer, 64|128|256 and so on
             }),
-    "alphabet": alphabet,
-    "loss": {},
-    "optimizer": ("Adam", {"lr":  0.0000001}),  #  0.0001}),
+    "alphabet": CV_CONFIG.get('alphabet'),
+    "loss": {"reduction": "mean"},
+    "optimizer": ("Adam", {"lr":  0.000005}),  #  0.0001}),
     # CHANGE DEVICE IF YOU USE GPU
     "device": "cpu",
 }
@@ -64,8 +60,7 @@ if __name__ == "__main__":
     else:
         EXPERIMENT_DIR.mkdir(parents=True, exist_ok=True)
 
-    transforms = get_transforms((MODEL_PARAMS['nn_module'][1]['image_height'],
-                                 MODEL_PARAMS['nn_module'][1]['image_height']*2))  # TODO: define your transforms here
+    transforms = get_transforms(CV_CONFIG.get("ocr_image_size"))  # TODO: define your transforms here
     # define data path
 
     train_dataset_paths = [p / "train" for p in DATASET_PATHS]
@@ -90,7 +85,7 @@ if __name__ == "__main__":
     model = CRNNModel(MODEL_PARAMS)
     # YOU CAN ADD CALLBACK IF IT NEEDED, FIND MORE IN argus.callbacks
     callbacks = [
-        MonitorCheckpoint(EXPERIMENT_DIR, monitor="val_loss", max_saves=6),
+        MonitorCheckpoint(EXPERIMENT_DIR, monitor="val_str_accuracy_letter", max_saves=6),
         EarlyStopping(monitor='val_loss', patience=200),
     ]
     # YOU CAN IMPLEMENT DIFFERENT METRICS AND USE THEM TO SEE HOW MANY CORRECT PREDICTION YOU HAVE

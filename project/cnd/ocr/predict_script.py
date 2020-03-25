@@ -29,20 +29,16 @@ EXPERIMENT_DIR = OCR_EXPERIMENTS_DIR / EXPERIMENT_NAME
 CV_CONFIG = Config(CONFIG_PATH)
 
 
-alphabet = " -"
-alphabet += string.ascii_uppercase
-alphabet += "".join([str(i) for i in range(10)])
-
 MODEL_PARAMS = {
     "nn_module":
         ("CRNN", {
-            'image_height': 32,  #As far as h == 1, image height must be equal 16
-            'number_input_channels': 1,  #3 for color image and 1 for gray scale
-            'number_class_symbols': len(alphabet),  #Length of alphabet
-            'rnn_size': 64,  # time length of rnn layer, 64|128|256 and so on
+            'image_height': CV_CONFIG.get('ocr_image_size')[0],  #As far as h == 1, image height must be equal 16
+            'number_input_channels': CV_CONFIG.get('model_image_ch'),  #3 for color image and 1 for gray scale
+            'number_class_symbols': len(CV_CONFIG.get('alphabet')),  #Length of alphabet
+            'rnn_size': CV_CONFIG.get('model_rnn_size'),  # time length of rnn layer, 64|128|256 and so on
             }),
-    "alphabet": alphabet,
-    "loss": {},
+    "alphabet": CV_CONFIG.get('alphabet'),
+    "loss": {"reduction": 'mean'},
     "optimizer": ("Adam", {"lr": 0.001}),
     # CHANGE DEVICE IF YOU USE GPU
     "device": "cpu",
@@ -55,9 +51,8 @@ if __name__ == "__main__":
     #print('Model path is', model_path)
     #print('Is it a file?', os.path.isfile(model_path))
 
-    predictor = Predictor(model_path, (MODEL_PARAMS['nn_module'][1]['image_height'],
-                                       MODEL_PARAMS['nn_module'][1]['image_height']*2),
-                          converter, device=MODEL_PARAMS['device'])
+    predictor = Predictor(model_path, converter,
+                          CV_CONFIG.get('ocr_image_size'), device=MODEL_PARAMS['device'])
 
     #print('File name', args.file_name)
     #print(os.path.isdir('/workdir/data/CropNumbers'))

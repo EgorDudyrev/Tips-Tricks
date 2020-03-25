@@ -1,4 +1,7 @@
 {
   "ocr_image_size": [32, 80],
-  "data_path": "/workdir/data/CropNumbers/"
+  "data_path": "/workdir/data/CropNumbers/",
+  "model_image_ch": 1,
+  "model_rnn_size": 64,
+  "alphabet": "-ABEKMHOPCTYX0123456789",
 }
