@@ -9,20 +9,34 @@ from worker.video_writer import VideoWriter
 
 
 class Visualizer:
-    def __init__(self, state: State, coord, color=(0, 0, 255), thick=2, font_scale=1.2, font=cv2.FONT_HERSHEY_SIMPLEX):
+    def __init__(self, state: State, coord, color=(0, 0, 255), thick=2, font_scale=1.2, font=cv2.FONT_HERSHEY_SIMPLEX,
+                 true_text=''):
         self.state = state
         self.coord_x, self.coord_y = coord
         self.color = color
         self.thickness = thick
         self.font_scale = font_scale
         self.font = font
+        self.true_text = true_text
+        self.acc_best = 0
+        self.best_text = ''
 
     def _draw_ocr_text(self):
         text = self.state.text
         frame = self.state.frame
+
+        if self.true_text is not '':
+            acc = sum([a == b for a, b in zip(text, self.true_text)])/len(self.true_text)
+            if acc > self.acc_best:
+                self.acc_best = acc
+                self.best_text = text
+
         if text:
             #TODO: Put text on frame
             cv2.putText(frame, text, (self.coord_x, self.coord_y), self.font,
+                        self.font_scale, self.color, self.thickness)
+        if self.best_text != '':
+            cv2.putText(frame, self.best_text, (self.coord_x, self.coord_y*1.1), self.font,
                         self.font_scale, self.color, self.thickness)
         return frame
 
@@ -34,7 +48,7 @@ class Visualizer:
 class VisualizeStream:
     def __init__(self, name,
                  in_video: VideoReader,
-                 state: State, video_path, fps, frame_size, coord):
+                 state: State, video_path, fps, frame_size, coord, true_text=''):
         self.name = name
         self.logger = logging.getLogger(self.name)
         self.state = state
@@ -48,7 +62,7 @@ class VisualizeStream:
         self.stopped = True
         self.visualize_thread = None
 
-        self.visualizer = Visualizer(self.state, self.coord)
+        self.visualizer = Visualizer(self.state, self.coord, true_text=true_text)
 
         self.logger.info("Create VisualizeStream")
 

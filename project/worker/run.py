@@ -13,7 +13,16 @@ from worker.visualize_stream import VisualizeStream
 
 # from worker.config import CONFIG
 # TODO: INITIALIZE YOUR args parser and remove sys.argv[] calls
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--input_fname", help="Input Video File Name", required=True)
+parser.add_argument("--output_fname", help="Output Video File Name", required=True)
+parser.add_argument("--log_level", help="Logging Level", default='INFO')
+parser.add_argument("--model_fname", help="Model File Name", required=True)
+parser.add_argument("--log_fname", help="Logging File Name", required=True)
+parser.add_argument("--text", help="Text To Compare With", default='')
+parser.add_argument("--fps", help="Desirable FPS", default=24, type=int)
+args = parser.parse_args()
 
 def setup_logging(path, level='INFO'):
     handlers = [logging.StreamHandler()]
@@ -37,10 +46,10 @@ class CNDProject:
         self.logger = logging.getLogger(self.name)
         self.state = State()
         self.video_reader = VideoReader("VideoReader", video_path)
-        self.ocr_stream = OcrStream("IcrStream", self.state, self.video_reader)
+        self.ocr_stream = OcrStream("IcrStream", self.state, self.video_reader, model_path=args.model_fname)
 
         self.visualize_stream = VisualizeStream("VisualizeStream", self.video_reader,
-                                                self.state, save_path, fps, frame_size, coord)
+                                                self.state, save_path, fps, frame_size, coord, true_text=args.text)
         self.logger.info("Start Project")
 
     def start(self):
@@ -64,11 +73,11 @@ class CNDProject:
 
 
 if __name__ == '__main__':
-    setup_logging(sys.argv[1], sys.argv[2])
+    setup_logging(args.log_fname, args.log_level)
     logger = logging.getLogger(__name__)
     project = None
     try:
-        project = CNDProject("CNDProject", sys.argv[3], sys.argv[4])
+        project = CNDProject("CNDProject", args.input_fname, args.output_fname, fps=args.fps)
         project.start()
     except Exception as e:
         logger.exception(e)

@@ -12,7 +12,7 @@ CV_CONFIG = Config(CONFIG_PATH)
 
 
 class OcrStream:
-    def __init__(self, name, state: State, video_reader: VideoReader, model_path='model_worker.pth'):
+    def __init__(self, name, state: State, video_reader: VideoReader, model_path):
         self.name = name
         self.logger = logging.getLogger(self.name)
         self.state = state
