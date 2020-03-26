@@ -53,6 +53,7 @@ RUN git clone --depth 1 -b release/4.2 --single-branch https://github.com/FFmpeg
     make -j$(nproc) && make install && ldconfig &&\
     cd ../.. && rm -rf FFmpeg
 
+RUN pip install textdistance
 
 ENV PYTHONPATH $PYTHONPATH:/workdir/src:/workdir
 ENV TORCH_HOME=/workdir/data/.torch

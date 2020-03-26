@@ -69,7 +69,7 @@ class ImageRotation(object):
         np.random.seed(seed)
         angle = self._angle if angle is None else angle
         if angle == 'random':
-            angle = np.random.uniform(-5, 5)#+np.random.choice([0,180])
+            angle = np.random.uniform(-2, 2)#+np.random.choice([0,180])
         return skimage.transform.rotate(img, angle)
 
 
@@ -87,9 +87,9 @@ class ChangeBrightnessContrast(object):
 
         np.random.seed(seed)
         if brightness == 'random':
-            brightness = np.round(np.random.uniform(-100, 100), 0).astype(int)
+            brightness = np.round(np.random.uniform(-30, 30), 0).astype(int)
         if contrast == 'random':
-            contrast = np.random.uniform(0.3, 1.5)
+            contrast = np.random.uniform(0.8, 1.2)
 
         new_img = ImageNormalization()(cv2.convertScaleAbs(img, alpha=contrast, beta=brightness))
         return new_img

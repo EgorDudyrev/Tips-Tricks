@@ -1,0 +1,61 @@
+AVG accuracy per letter: 0.4774
+Median accuracy per letter: 0.3542
+
+AVG FPS: 45.4
+Median FPS: 46.79
+
+IMG_1002.MOV
+true text: M771BT799
+best prediction: 077111
+accuracy per letter: 0.3333
+levenshtein: 6
+FPS: 41.46
+
+IMG_1003.MOV
+true text: B622BP799
+best prediction: 0662B12
+accuracy per letter: 0.3333
+levenshtein: 6
+FPS: 47.26
+
+IMG_1004.MOV
+true text: Y726HK163
+best prediction: 0726HK163
+accuracy per letter: 0.8889
+levenshtein: 2
+FPS: 46.81
+
+IMG_1009.MOV
+true text: P897CX197
+best prediction: C5072T19
+accuracy per letter: 0.3333
+levenshtein: 6
+FPS: 40.71
+
+IMG_1010.MOV
+true text: C841ME799
+best prediction: C841TE199
+accuracy per letter: 0.7778
+levenshtein: 3
+FPS: 47.43
+
+IMG_1012.MOV
+true text: 6874BH77
+best prediction: B8741
+accuracy per letter: 0.375
+levenshtein: 5
+FPS: 45.87
+
+IMG_1013.MOV
+true text: K739HC799
+best prediction: A759HC177
+accuracy per letter: 0.4444
+levenshtein: 5
+FPS: 46.76
+
+IMG_1014.MOV
+true text: T401PA799
+best prediction: T4E1
+accuracy per letter: 0.3333
+levenshtein: 6
+FPS: 46.92

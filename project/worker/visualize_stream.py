@@ -7,6 +7,9 @@ from worker.state import State
 from worker.video_reader import VideoReader
 from worker.video_writer import VideoWriter
 
+from textdistance import levenshtein
+import re
+
 
 class Visualizer:
     def __init__(self, state: State, coord, color=(0, 0, 255), thick=2, font_scale=1.2, font=cv2.FONT_HERSHEY_SIMPLEX,
@@ -25,19 +28,26 @@ class Visualizer:
         text = self.state.text
         frame = self.state.frame
 
+        text = text+'\n' if text is not None else ''
+
         if self.true_text is not '':
             acc = sum([a == b for a, b in zip(text, self.true_text)])/len(self.true_text)
             if acc > self.acc_best:
                 self.acc_best = acc
                 self.best_text = text
+            text += f"best prediction: {self.best_text}\n"
+            text += f"accuracy per letter: {round(self.acc_best,4)}\n"
+            text += f"levenshtein: {levenshtein.distance(self.best_text, self.true_text)}\n"
 
-        if text:
+        text += f"FPS: {round(self.state.frame_id/self.state.data['ts'],2)}"
+        text = re.sub('\n+', '\n', text)
+
+        for idx, txt in enumerate(text.split('\n')):
             #TODO: Put text on frame
-            cv2.putText(frame, text, (self.coord_x, self.coord_y), self.font,
+            cv2.putText(frame, txt, (self.coord_x, self.coord_y+idx*50), self.font,
                         self.font_scale, self.color, self.thickness)
-        if self.best_text != '':
-            cv2.putText(frame, self.best_text, (self.coord_x, self.coord_y*1.1), self.font,
-                        self.font_scale, self.color, self.thickness)
+
+
         return frame
 
     def __call__(self):

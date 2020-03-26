@@ -20,7 +20,7 @@ parser.add_argument("--output_fname", help="Output Video File Name", required=Tr
 parser.add_argument("--log_level", help="Logging Level", default='INFO')
 parser.add_argument("--model_fname", help="Model File Name", required=True)
 parser.add_argument("--log_fname", help="Logging File Name", required=True)
-parser.add_argument("--text", help="Text To Compare With", default='')
+parser.add_argument("--text", help="Text To Compare With", default='', type=str)
 parser.add_argument("--fps", help="Desirable FPS", default=24, type=int)
 args = parser.parse_args()
 
@@ -41,7 +41,7 @@ def setup_logging(path, level='INFO'):
 
 
 class CNDProject:
-    def __init__(self, name, video_path, save_path, fps=24, frame_size=(1600, 800), coord=(500, 500)):
+    def __init__(self, name, video_path, save_path, fps=24, frame_size=(1600, 800), coord=(100, 500)):
         self.name = name
         self.logger = logging.getLogger(self.name)
         self.state = State()
